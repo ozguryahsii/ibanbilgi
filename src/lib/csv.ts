@@ -85,7 +85,10 @@ export function summarizeBulk(rows: BulkRow[]): BulkSummary {
   };
 }
 
-export function buildResultsCsv(rows: BulkRow[]): string {
+export function buildResultsCsv(
+  rows: BulkRow[],
+  branchNames?: (bankCode?: string, branchCode?: string) => string | undefined
+): string {
   const data = rows.map(({ line, label, result }) => ({
     Satir: line,
     Etiket: label ?? "",
@@ -96,6 +99,8 @@ export function buildResultsCsv(rows: BulkRow[]): string {
     Banka: result.bank?.name ?? (result.valid ? "Bilinmeyen banka" : ""),
     "Banka Turu": result.bank ? BANK_TYPE_LABELS[result.bank.type] : "",
     "Sube Kodu (Tahmini)": result.branchCodeGuess ?? "",
+    "Sube Adi (Tahmini)":
+      branchNames?.(result.bankCode, result.branchCodeGuess) ?? "",
   }));
   // BOM, Excel'in Türkçe karakterleri doğru açması için eklenir.
   return "\uFEFF" + Papa.unparse(data, { delimiter: ";" });

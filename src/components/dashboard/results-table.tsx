@@ -21,8 +21,26 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { BulkRow } from "@/lib/csv";
+import { useBranchName } from "@/lib/branch-directory";
 
 type Filter = "all" | "valid" | "invalid";
+
+function BranchCell({
+  bankCode,
+  branchCode,
+}: {
+  bankCode?: string;
+  branchCode?: string;
+}) {
+  const name = useBranchName(bankCode, branchCode);
+  if (!branchCode) return <span className="text-muted-foreground">—</span>;
+  return (
+    <span className="whitespace-nowrap">
+      {name && <span>{name} </span>}
+      <span className="font-mono text-muted-foreground">({branchCode})</span>
+    </span>
+  );
+}
 
 const PAGE_SIZE = 50;
 
@@ -162,10 +180,11 @@ export function ResultsTable({ rows }: { rows: BulkRow[] }) {
                     <span className="text-muted-foreground">—</span>
                   )}
                 </TableCell>
-                <TableCell className="text-right font-mono text-xs">
-                  {row.result.branchCodeGuess ?? (
-                    <span className="text-muted-foreground">—</span>
-                  )}
+                <TableCell className="text-right text-xs">
+                  <BranchCell
+                    bankCode={row.result.bankCode}
+                    branchCode={row.result.branchCodeGuess}
+                  />
                 </TableCell>
               </motion.tr>
             ))}

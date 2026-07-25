@@ -6,7 +6,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "preview": "npx serve out -l 3001",
-    "lint": "eslint"
+    "lint": "eslint",
+    "subeler": "node scripts/subeleri-guncelle.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",

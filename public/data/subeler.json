@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "kaynak": "Elle doğrulanmış başlangıç verisi — tam liste için: npm run subeler (TCMB bankaSubeTumListe.xml)",
+    "guncelleme": "2026-07-25",
+    "banka": 5,
+    "sube": 7
+  },
+  "00010": {
+    "1745": "Ankara Kamu Kurumsal"
+  },
+  "00012": {
+    "9408": "Bakanlıklar/Ankara"
+  },
+  "00046": {
+    "258": "Levent Sanayi"
+  },
+  "00062": {
+    "88": "Kadıköy",
+    "373": "İkitelli Organize Sanayi Bölgesi"
+  },
+  "00064": {
+    "1035": "Levent/İstanbul",
+    "4299": "Başkent/Ankara"
+  }
+}

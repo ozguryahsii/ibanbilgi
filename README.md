@@ -86,6 +86,23 @@ server {
    ana sayfadan gezinme yeterliyse buna gerek kalmaz; sayfa geçişleri istemci
    taraflıdır).
 
+### Şube dizinini güncelleme (şube adları)
+
+Şube kodlarının adlarla eşleşmesi (`88 → Kadıköy` gibi) `public/data/subeler.json`
+dosyasından okunur. Depoda yalnızca elle doğrulanmış küçük bir başlangıç seti
+bulunur; **tam listeyi** TCMB'nin resmî banka-şube listesinden tek komutla
+üretebilirsiniz:
+
+```bash
+npm run subeler     # TCMB bankaSubeTumListe.xml → public/data/subeler.json
+npm run build       # yeni dizinle siteyi yeniden derle
+```
+
+Betik yalnızca kamuya açık referans veriyi indirir; IBAN veya kullanıcı verisi
+hiçbir yere gönderilmez. İnternet erişimi olmayan ortamlar için XML'i elle
+indirip `node scripts/subeleri-guncelle.mjs /yol/bankaSubeTumListe.xml`
+biçiminde de çalıştırabilirsiniz.
+
 ### Banka listesini güncelleme
 
 Banka kodu referansı `src/lib/banks.ts` dosyasına gömülüdür. Yeni banka

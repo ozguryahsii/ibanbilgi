@@ -36,6 +36,7 @@ import {
   SAMPLE_CSV,
   summarizeBulk,
 } from "@/lib/csv";
+import { loadDirectory, lookupBranchName } from "@/lib/branch-directory";
 import { cn } from "@/lib/utils";
 import { KpiCard } from "./kpi-card";
 import { ResultsTable } from "./results-table";
@@ -294,10 +295,13 @@ export function BulkAnalyzer() {
                 </Button>
                 <Button
                   size="sm"
-                  onClick={() => {
+                  onClick={async () => {
+                    const directory = await loadDirectory();
                     downloadTextFile(
                       "iban-sonuclari.csv",
-                      buildResultsCsv(phase.rows)
+                      buildResultsCsv(phase.rows, (bank, sube) =>
+                        lookupBranchName(directory, bank, sube)
+                      )
                     );
                     toast.success("Sonuç dosyası indirildi.");
                   }}

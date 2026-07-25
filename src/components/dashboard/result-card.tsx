@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 import { BorderBeam } from "@/components/magicui/border-beam";
 import { BANK_TYPE_LABELS } from "@/lib/banks";
+import { useBranchName } from "@/lib/branch-directory";
 import { IbanResult } from "@/lib/iban";
 
 function copyText(text: string, message: string) {
@@ -70,6 +71,7 @@ function Field({
 
 /** Tekil sorgu sonucunu gösteren animasyonlu kart. */
 export function ResultCard({ result }: { result: IbanResult }) {
+  const branchName = useBranchName(result.bankCode, result.branchCodeGuess);
   if (!result.valid) {
     return (
       <motion.div
@@ -165,11 +167,21 @@ export function ResultCard({ result }: { result: IbanResult }) {
             </Field>
             <Field
               icon={GitBranch}
-              label="Şube Kodu (Tahmini)"
+              label="Şube (Tahmini)"
               tooltip={result.branchNote}
             >
               {result.branchCodeGuess ? (
-                <span className="font-mono">{result.branchCodeGuess}</span>
+                <span>
+                  {branchName && <span>{branchName} </span>}
+                  <span className="font-mono text-muted-foreground">
+                    ({result.branchCodeGuess})
+                  </span>
+                  {!branchName && (
+                    <span className="ml-1 text-xs text-muted-foreground">
+                      — ad dizinde yok
+                    </span>
+                  )}
+                </span>
               ) : (
                 <span className="text-muted-foreground">Tespit edilemedi</span>
               )}
