@@ -47,10 +47,14 @@ Gereksinim: Node.js 20+
 
 ```bash
 npm install
-npm run dev       # http://localhost:3000
+npm run dev       # http://localhost:3001
 npm run lint      # ESLint
 npm run build     # Üretim çıktısı (statik) → out/
+npm run preview   # out/ klasörünü http://localhost:3001 üzerinde sunar
 ```
+
+Geliştirme sunucusu, 3000 portunu kullanan diğer uygulamalarla çakışmamak için
+**3001** portunda çalışır.
 
 ## Yayınlama
 
