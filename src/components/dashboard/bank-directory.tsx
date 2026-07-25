@@ -123,9 +123,11 @@ export function BankDirectory() {
                         </span>
                       </TooltipTrigger>
                       <TooltipContent>
-                        Hesap bölümünün ilk {bank.branchPattern.length} hanesi
-                        tahmini şube kodu olarak okunur. Resmî bir IBAN alanı
-                        değildir.
+                        Şube kodu, hesap bölümünün{" "}
+                        {bank.branchPattern.offset + 1}–
+                        {bank.branchPattern.offset + bank.branchPattern.length}.
+                        hanelerinden okunur; kalıp gerçek örnek IBAN&apos;larla
+                        doğrulanmıştır. Resmî bir IBAN alanı değildir.
                       </TooltipContent>
                     </Tooltip>
                   ) : (

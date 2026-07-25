@@ -67,7 +67,7 @@ function mod97(iban: string): number {
 }
 
 const BRANCH_STANDARD_NOTE =
-  "TR IBAN standardında şube kodu resmî bir alan değildir; gösterilen değer bankaya özgü bilinen yerleşim kalıbına dayalı bir tahmindir.";
+  "TR IBAN standardında şube kodu resmî bir alan değildir; gösterilen değer, bu banka için gerçek örnek IBAN'larla doğrulanmış yerleşim kalıbına dayalı bir tahmindir.";
 const BRANCH_UNKNOWN_NOTE =
   "Bu banka için IBAN içinde doğrulanmış bir şube kodu kalıbı bilinmiyor; şube bilgisi IBAN'dan güvenilir şekilde çıkarılamaz.";
 
@@ -109,7 +109,8 @@ export function parseIban(raw: string): IbanResult {
       bank.branchPattern.offset + bank.branchPattern.length
     );
     if (/^\d+$/.test(guess) && Number(guess) > 0) {
-      branchCodeGuess = guess;
+      // Baştaki sıfırlar atılır: "00088" → "88", "09408" → "9408".
+      branchCodeGuess = String(Number(guess));
       branchNote = BRANCH_STANDARD_NOTE;
     } else {
       branchNote =

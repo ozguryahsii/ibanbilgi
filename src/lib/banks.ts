@@ -9,6 +9,16 @@
  * `branchPattern`: bankanın hesap bölümüne şube kodunu gömdüğü biliniyorsa
  * şube kodunun konumu. TR IBAN standardında şube kodu resmî bir alan
  * OLMADIĞI için bu her zaman "tahmini" olarak sunulur.
+ *
+ * Kalıplar, kamuya açık gerçek IBAN'lar (şube adı/kodu ile birlikte
+ * yayımlanmış bağış ve kurum hesapları) üzerinde doğrulanmıştır:
+ *   - Ziraat  {0,4}: örn. AFAD/Kızılay hesapları (şube 1282, 2110, 1745)
+ *   - İş      {5,4}: örn. TEMA Levent 1035, AFAD Başkent 4299
+ *   - Akbank  {0,4}: örn. Levent Sanayi 0258
+ *   - Garanti {0,5}: örn. Kadıköy 088 → "00088", İkitelli 373 → "00373"
+ *   - Halk    {0,5}: örn. AFAD Bakanlıklar 9408 → "09408"
+ * Şube kodu gömmediği yine gerçek örneklerle görülen bankalarda
+ * (Yapı Kredi, Vakıfbank, Kuveyt Türk, QNB) kalıp tanımlanmaz.
  */
 
 export type BankType = "mevduat" | "katilim" | "kalkinma-yatirim" | "diger";
@@ -36,24 +46,26 @@ export const BANK_TYPE_LABELS: Record<BankType, string> = {
   diger: "Diğer Kuruluş",
 };
 
-const LEADING_BRANCH_4: BranchPattern = { offset: 0, length: 4 };
+const LEADING_4: BranchPattern = { offset: 0, length: 4 };
+const LEADING_5: BranchPattern = { offset: 0, length: 5 };
+const IS_BANKASI: BranchPattern = { offset: 5, length: 4 };
 
 export const BANKS: Bank[] = [
   { code: "00001", name: "Türkiye Cumhuriyet Merkez Bankası", shortName: "TCMB", type: "diger" },
   { code: "00004", name: "İller Bankası A.Ş.", shortName: "İller Bankası", type: "kalkinma-yatirim" },
-  { code: "00010", name: "T.C. Ziraat Bankası A.Ş.", shortName: "Ziraat Bankası", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
-  { code: "00012", name: "Türkiye Halk Bankası A.Ş.", shortName: "Halkbank", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00010", name: "T.C. Ziraat Bankası A.Ş.", shortName: "Ziraat Bankası", type: "mevduat", branchPattern: LEADING_4 },
+  { code: "00012", name: "Türkiye Halk Bankası A.Ş.", shortName: "Halkbank", type: "mevduat", branchPattern: LEADING_5 },
   { code: "00014", name: "Türkiye Sınai Kalkınma Bankası A.Ş.", shortName: "TSKB", type: "kalkinma-yatirim" },
-  { code: "00015", name: "Türkiye Vakıflar Bankası T.A.O.", shortName: "VakıfBank", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00015", name: "Türkiye Vakıflar Bankası T.A.O.", shortName: "VakıfBank", type: "mevduat" },
   { code: "00016", name: "Türkiye İhracat Kredi Bankası A.Ş.", shortName: "Eximbank", type: "kalkinma-yatirim" },
   { code: "00017", name: "Türkiye Kalkınma ve Yatırım Bankası A.Ş.", shortName: "TKYB", type: "kalkinma-yatirim" },
   { code: "00029", name: "Birleşik Fon Bankası A.Ş.", shortName: "Birleşik Fon", type: "mevduat" },
-  { code: "00032", name: "Türk Ekonomi Bankası A.Ş.", shortName: "TEB", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
-  { code: "00046", name: "Akbank T.A.Ş.", shortName: "Akbank", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00032", name: "Türk Ekonomi Bankası A.Ş.", shortName: "TEB", type: "mevduat" },
+  { code: "00046", name: "Akbank T.A.Ş.", shortName: "Akbank", type: "mevduat", branchPattern: LEADING_4 },
   { code: "00059", name: "Şekerbank T.A.Ş.", shortName: "Şekerbank", type: "mevduat" },
-  { code: "00062", name: "Türkiye Garanti Bankası A.Ş.", shortName: "Garanti BBVA", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
-  { code: "00064", name: "Türkiye İş Bankası A.Ş.", shortName: "İş Bankası", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
-  { code: "00067", name: "Yapı ve Kredi Bankası A.Ş.", shortName: "Yapı Kredi", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00062", name: "Türkiye Garanti Bankası A.Ş.", shortName: "Garanti BBVA", type: "mevduat", branchPattern: LEADING_5 },
+  { code: "00064", name: "Türkiye İş Bankası A.Ş.", shortName: "İş Bankası", type: "mevduat", branchPattern: IS_BANKASI },
+  { code: "00067", name: "Yapı ve Kredi Bankası A.Ş.", shortName: "Yapı Kredi", type: "mevduat" },
   { code: "00091", name: "Arap Türk Bankası A.Ş.", shortName: "Arap Türk Bankası", type: "mevduat" },
   { code: "00092", name: "Citibank A.Ş.", shortName: "Citibank", type: "mevduat" },
   { code: "00094", name: "Bank Mellat", shortName: "Bank Mellat", type: "mevduat" },
@@ -65,7 +77,7 @@ export const BANKS: Bank[] = [
   { code: "00103", name: "Fibabanka A.Ş.", shortName: "Fibabanka", type: "mevduat" },
   { code: "00108", name: "Turkland Bank A.Ş.", shortName: "T-Bank", type: "mevduat" },
   { code: "00109", name: "ICBC Turkey Bank A.Ş.", shortName: "ICBC Turkey", type: "mevduat" },
-  { code: "00111", name: "QNB Bank A.Ş.", shortName: "QNB", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00111", name: "QNB Bank A.Ş.", shortName: "QNB", type: "mevduat" },
   { code: "00115", name: "Deutsche Bank A.Ş.", shortName: "Deutsche Bank", type: "mevduat" },
   { code: "00116", name: "Pasha Yatırım Bankası A.Ş.", shortName: "Pasha Yatırım", type: "kalkinma-yatirim" },
   { code: "00121", name: "Standard Chartered Yatırım Bankası Türk A.Ş.", shortName: "Standard Chartered", type: "kalkinma-yatirim" },
@@ -75,7 +87,7 @@ export const BANKS: Bank[] = [
   { code: "00125", name: "Burgan Bank A.Ş.", shortName: "Burgan Bank", type: "mevduat" },
   { code: "00129", name: "Merrill Lynch Yatırım Bank A.Ş.", shortName: "Merrill Lynch", type: "kalkinma-yatirim" },
   { code: "00132", name: "İstanbul Takas ve Saklama Bankası A.Ş.", shortName: "Takasbank", type: "kalkinma-yatirim" },
-  { code: "00134", name: "DenizBank A.Ş.", shortName: "DenizBank", type: "mevduat", branchPattern: LEADING_BRANCH_4 },
+  { code: "00134", name: "DenizBank A.Ş.", shortName: "DenizBank", type: "mevduat" },
   { code: "00135", name: "Anadolubank A.Ş.", shortName: "Anadolubank", type: "mevduat" },
   { code: "00137", name: "Rabobank A.Ş.", shortName: "Rabobank", type: "mevduat" },
   { code: "00138", name: "Diler Yatırım Bankası A.Ş.", shortName: "Diler Yatırım", type: "kalkinma-yatirim" },
@@ -96,7 +108,7 @@ export const BANKS: Bank[] = [
   { code: "00158", name: "Colendi Bank A.Ş.", shortName: "Colendi Bank", type: "mevduat" },
   { code: "00159", name: "FUPS Bank A.Ş.", shortName: "FUPS Bank", type: "mevduat" },
   { code: "00203", name: "Albaraka Türk Katılım Bankası A.Ş.", shortName: "Albaraka Türk", type: "katilim" },
-  { code: "00205", name: "Kuveyt Türk Katılım Bankası A.Ş.", shortName: "Kuveyt Türk", type: "katilim", branchPattern: LEADING_BRANCH_4 },
+  { code: "00205", name: "Kuveyt Türk Katılım Bankası A.Ş.", shortName: "Kuveyt Türk", type: "katilim" },
   { code: "00206", name: "Türkiye Finans Katılım Bankası A.Ş.", shortName: "Türkiye Finans", type: "katilim" },
   { code: "00209", name: "Ziraat Katılım Bankası A.Ş.", shortName: "Ziraat Katılım", type: "katilim" },
   { code: "00210", name: "Vakıf Katılım Bankası A.Ş.", shortName: "Vakıf Katılım", type: "katilim" },
