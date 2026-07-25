@@ -57,6 +57,7 @@ export function BankDirectory() {
             <TabsTrigger value="mevduat">Mevduat</TabsTrigger>
             <TabsTrigger value="katilim">Katılım</TabsTrigger>
             <TabsTrigger value="kalkinma-yatirim">Kalkınma & Yatırım</TabsTrigger>
+            <TabsTrigger value="diger">Diğer</TabsTrigger>
           </TabsList>
         </Tabs>
         <div className="relative ml-auto w-full sm:w-72">
